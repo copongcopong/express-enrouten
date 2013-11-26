@@ -97,7 +97,7 @@ module.exports = function (app) {
 											controllerPathFixed = controllerPathNoExt.split(path.sep).join('/'); //for Windows
 										}
 										
-										console.log(file, controllerPathFixed);
+										
 										
 										app.namespace(controllerPathFixed, function(){
 											controller(app);	
