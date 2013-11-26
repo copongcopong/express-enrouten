@@ -91,7 +91,7 @@ module.exports = function (app) {
 										var controllerPathFixed;
 										
 										if(path.basename(controllerPathDirty) === 'index.js') {
-											controllerPathFixed = controllerPathDirty.substr(0, controllerPathDirty.lastIndexOf('/index.js'));
+											controllerPathFixed = controllerPathDirty.substr(0, controllerPathDirty.lastIndexOf('/index.js')).split(path.sep).join('/'); //for Windows
 										} else {
 											var controllerPathNoExt = controllerPathDirty.substr(0, controllerPathDirty.lastIndexOf('.'));
 											controllerPathFixed = controllerPathNoExt.split(path.sep).join('/'); //for Windows
