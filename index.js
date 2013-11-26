@@ -80,17 +80,33 @@ module.exports = function (app) {
             }
 
             // Directory to scan for routes
+						//set namespace accordingly based on folder hierarchy
             loaddir(settings.directory).forEach(function (file) {
                 var controller = require(file);
-								var controllerName = path.basename(file, '.js');
-								if (typeof controller === 'function' && controller.length === 1) {
+								
+                if (typeof controller === 'function' && controller.length === 1) {
 									if(typeof app.namespace === 'function') {
-										app.namespace('/' + controllerName, function(){
+										var dir = resolve(settings.directory);
+										var controllerPathDirty = file.split(dir)[1];
+										var controllerPathFixed;
+										
+										if(path.basename(controllerPathDirty) === 'index.js') {
+											controllerPathFixed = controllerPathDirty.substr(0, controllerPathDirty.lastIndexOf('/index.js'));
+										} else {
+											var controllerPathNoExt = controllerPathDirty.substr(0, controllerPathDirty.lastIndexOf('.'));
+											controllerPathFixed = controllerPathNoExt.split(path.sep).join('/'); //for Windows
+										}
+										
+										console.log(file, controllerPathFixed);
+										
+										app.namespace(controllerPathFixed, function(){
 											controller(app);	
 										});
 									} else {
 										controller(app);
 									}
+                    
+                }
             });
 
             (settings.routes || []).forEach(function (def) {
