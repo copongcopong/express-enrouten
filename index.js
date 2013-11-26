@@ -82,9 +82,15 @@ module.exports = function (app) {
             // Directory to scan for routes
             loaddir(settings.directory).forEach(function (file) {
                 var controller = require(file);
-                if (typeof controller === 'function' && controller.length === 1) {
-                    controller(app);
-                }
+								var controllerName = path.basename(file, '.js');
+								if (typeof controller === 'function' && controller.length === 1) {
+									if(typeof app.namespace === 'function') {
+										app.namespace('/' + controllerName, function(){
+											controller(app);	
+										});
+									} else {
+										controller(app);
+									}
             });
 
             (settings.routes || []).forEach(function (def) {
